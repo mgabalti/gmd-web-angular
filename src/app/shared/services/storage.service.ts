@@ -19,9 +19,4 @@ export class StorageService {
   public set accessToken(token: string | any) {
     this.storage.setItem('AccessToken', token);
   }
-
-  public isLogin(): boolean {
-    const accessToken = this.accessToken;
-    return accessToken && accessToken.length > 0;
-  }
 }

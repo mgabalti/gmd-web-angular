@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiHandler } from '../shared/services/api-handler.service';
-import { Subscription, interval, map } from 'rxjs';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { AUTH_API_ENDPOINTS } from '../shared/Constants/api-endpoint-url';
@@ -12,7 +11,6 @@ import { StorageService } from '../shared/services/storage.service';
   providedIn: 'root'
 })
 export class AuthService extends ApiHandler {
-  private refreshTokenTimeout: Subscription | undefined;
   constructor(myHttpClient: HttpClient,
     private router: Router, private storageService: StorageService) {
     super(myHttpClient);
@@ -31,6 +29,14 @@ export class AuthService extends ApiHandler {
 
   public get loginUserId() {
     return this.getUserData?.user_id;
+  }
+  public isLogin(): boolean {
+    const accessToken = this.storageService.accessToken;
+    return accessToken?.length > 0;
+  }
+  public logout(): void {
+    this.storageService.clean();
+    this.router.navigate(['/login']);
   }
 }
 

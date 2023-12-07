@@ -1,0 +1,21 @@
+$primary-color: #81a143;
+.p-button {
+    color: #fff;
+    border-width: 0px;
+    border-radius: 35px;
+    letter-spacing: 1px;
+    text-align: center;
+    font-weight: 600;
+    background-color: $primary-color;
+    width: 120px;
+    padding: 6px;
+    vertical-align: middle;
+}
+
+.p-inputtext:enabled:hover {
+    border-color: $primary-color;
+}
+
+.p-inputtext:enabled:focus {
+    border-color: $primary-color; 
+}

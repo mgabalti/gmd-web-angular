@@ -8,15 +8,15 @@ import { AuthService } from 'src/app/appServices/auth.service';
 import { StorageService } from 'src/app/shared/services/storage.service';
 import { ToastService } from 'src/app/shared/services/toast.service';
 import { Router } from '@angular/router';
-import { delay } from 'rxjs';
-import { LoaderService } from 'src/app/shared/services/loader.service';
+import { FormValidationService } from 'src/app/shared/services/form-validation.service';
+import { ErrorMessagesComponent } from "../../shared/Components/error-messages/error-messages.component";
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule,ButtonModule, InputTextModule, CardModule, ReactiveFormsModule],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
+  imports: [CommonModule, ButtonModule, InputTextModule, CardModule, ReactiveFormsModule, ErrorMessagesComponent]
 })
 export class LoginComponent implements OnInit {
   form: FormGroup = new FormGroup({
@@ -24,14 +24,15 @@ export class LoginComponent implements OnInit {
     password: new FormControl(''),
   });
   constructor(private formBuilder: FormBuilder, private authService: AuthService,
-     private storageService: StorageService,
-     private toastService: ToastService, private router: Router, private loader: LoaderService) { }
+    private storageService: StorageService,
+    private toastService: ToastService,
+    private router: Router, private formValidationService: FormValidationService) { }
 
   ngOnInit(): void {
     this.form = this.formBuilder.group(
       {
         username: [
-          '',
+          null,
           [
             Validators.required
           ]
@@ -48,13 +49,13 @@ export class LoginComponent implements OnInit {
 
   onSubmit(): void {
     if (this.form.valid) {
-    const credentials = {
+      const credentials = {
         email: this.form.get("username")?.value,
         password: this.form.get("password")?.value
-    };
+      };
       this.authService.login(credentials).subscribe({
         next: res => {
-          if(res.status == 1) {
+          if (res.status == 1) {
             this.storageService.accessToken = res.data.accessToken;
             this.toastService.showSuccess(res.message)
             this.router.navigate(['/clinic-dashboard']);
@@ -66,7 +67,14 @@ export class LoginComponent implements OnInit {
           console.log(err);
         }
       });
+    } else {
+      this.formValidationService.markFieldsAsDirty(this.form);
     }
-    console.log(JSON.stringify(this.form.value, null, 2));
+  }
+  getControl(keyOrPath: string): FormControl {
+    return this.form.get(keyOrPath) as FormControl;
+  }
+  navigateToForgotPassword() {
+    this.router.navigate(['/login/forgot-password']);
   }
 }

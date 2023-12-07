@@ -17,7 +17,6 @@ interface IApiBaseActions {
 export class ApiHandler implements IApiBaseActions {
     constructor(private myHttpClient: HttpClient) { }
 
-
     handleResponse(response: any) {
         if (response?.Status === 500) {
             console.log(response);
@@ -48,15 +47,15 @@ export class ApiHandler implements IApiBaseActions {
             .pipe(tap((x: any) => this.handleResponse(x)));
     }
 
-  deleteById(url: string, id: any) {
-    return this.myHttpClient
-      .delete<any>(url, {
-        params:{
-          id: id
-        }
-      })
-      .pipe(tap((x: any) => this.handleResponse(x)));
-  }
+    deleteById(url: string, id: any) {
+        return this.myHttpClient
+            .delete<any>(url, {
+                params: {
+                    id: id
+                }
+            })
+            .pipe(tap((x: any) => this.handleResponse(x)));
+    }
 
     put(url: string, data: any) {
         return this.myHttpClient

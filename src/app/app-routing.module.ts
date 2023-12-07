@@ -1,33 +1,24 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { LoginComponent } from './pages/login/login.component';
-import { ClinicDashboardComponent } from './pages/clinic-dashboard/clinic-dashboard.component';
-import { LayoutComponent } from './shared/Components/layout/layout.component';
-import { AuthLayoutComponent } from './shared/Components/auth-layout/auth-layout.component';
+import { authGuard } from './shared/auth.guard';
 export const APP_ROUTES: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/login' },
   {
     path: 'login',
-    component: AuthLayoutComponent,
+    loadComponent: () => import('./shared/Components/auth-layout/auth-layout.component').then(x=>x.AuthLayoutComponent),
     children: [
-      { path: '', component: LoginComponent },
+      { path: '', loadComponent: () => import('./pages/login/login.component').then(x=>x.LoginComponent) },
+      { path: 'forgot-password', loadComponent: () => import('./pages/forgot-password/forgot-password.component').then(x=>x.ForgotPasswordComponent) },
     ],
   },
   {
     path: 'clinic-dashboard',
-    component: LayoutComponent,
+    loadComponent: () => import('./shared/Components/layout/layout.component').then(x=>x.LayoutComponent),
+    canActivate: [authGuard],
     children: [
-      { path: '', component: ClinicDashboardComponent }
+      { path: '', loadComponent: () => import('./pages/clinic-dashboard/clinic-dashboard.component').then(x=>x.ClinicDashboardComponent) },
     ],
   }, 
-  // {
-  //   path: 'md-dashboard',
-  //   component: LayoutComponent,
-  //   children: [
-  //     { path: '', component: LoginComponent },
-  //   ],
-  // },
-
 ];
 
 @NgModule({

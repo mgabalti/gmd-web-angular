@@ -5,10 +5,11 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { LoaderService } from '../../services/loader.service';
 import { delay } from 'rxjs';
 import { RouterModule } from '@angular/router';
+import {ProgressBarModule} from 'primeng/progressbar';
 @Component({
   selector: 'app-auth-layout',
   standalone: true,
-  imports: [CommonModule,RouterModule, ToastModule, ProgressSpinnerModule],
+  imports: [CommonModule,RouterModule, ToastModule, ProgressSpinnerModule, ProgressBarModule],
   templateUrl: './auth-layout.component.html',
   styleUrls: ['./auth-layout.component.scss']
 })
