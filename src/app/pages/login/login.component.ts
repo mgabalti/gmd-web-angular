@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -7,18 +7,20 @@ import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } 
 import { AuthService } from 'src/app/appServices/auth.service';
 import { StorageService } from 'src/app/shared/services/storage.service';
 import { ToastService } from 'src/app/shared/services/toast.service';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { FormValidationService } from 'src/app/shared/services/form-validation.service';
 import { ErrorMessagesComponent } from "../../shared/Components/error-messages/error-messages.component";
+import { DisableDuringSubmitDirective } from 'src/app/shared/directives/disable-during-submit.directive';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
-  imports: [CommonModule, ButtonModule, InputTextModule, CardModule, ReactiveFormsModule, ErrorMessagesComponent]
+  imports: [RouterModule, DisableDuringSubmitDirective, CommonModule, ButtonModule, InputTextModule, CardModule, ReactiveFormsModule, ErrorMessagesComponent]
 })
 export class LoginComponent implements OnInit {
+  fieldTextType = false;
   form: FormGroup = new FormGroup({
     username: new FormControl(''),
     password: new FormControl(''),
@@ -74,7 +76,19 @@ export class LoginComponent implements OnInit {
   getControl(keyOrPath: string): FormControl {
     return this.form.get(keyOrPath) as FormControl;
   }
-  navigateToForgotPassword() {
-    this.router.navigate(['/login/forgot-password']);
+  passwordShowHide(showSpan: HTMLSpanElement, hideSpan: HTMLSpanElement, passwordInput: HTMLInputElement, isShow: boolean) {
+    if (isShow) {
+      showSpan.classList.remove("show-password");
+      showSpan.classList.add("hide-password");
+      hideSpan.classList.remove("hide-password");
+      hideSpan.classList.add("show-password");
+      passwordInput.type = "text"
+    } else {
+      showSpan.classList.add("show-password");
+      showSpan.classList.remove("hide-password");
+      hideSpan.classList.remove("show-password");
+      hideSpan.classList.add("hide-password");
+      passwordInput.type = "password"
+    };
   }
 }

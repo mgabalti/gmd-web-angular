@@ -10,8 +10,8 @@ import { MessageModule } from 'primeng/message';
   styleUrls: ['./error-messages.component.scss']
 })
 export class ErrorMessagesComponent {
-  @Input() control: FormControl | undefined;
-  @Input() displayName: string | undefined;
+  @Input({ required: true }) control: FormControl | undefined;
+  @Input({ required: true }) displayName: string | undefined;
   hasErrorWhenDirty(errorCode: string): boolean | undefined {
     return this.control?.dirty && this.control?.hasError(errorCode);
   }

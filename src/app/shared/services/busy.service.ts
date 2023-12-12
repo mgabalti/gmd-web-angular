@@ -1,5 +1,4 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Injectable, signal } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
@@ -10,10 +9,8 @@ export class BusyService {
     numberOfNonBusyRequests: number = 0;
 
     // Observable navItem source
-    private _busySource = new BehaviorSubject<boolean>(false);
-    // Observable navItem stream
-    busy$ = this._busySource.asObservable();
-
+    private _busySource = signal<boolean>(false);
+    busy$ = this._busySource;
     constructor() { }
 
     public changeBusy(val: boolean) {
@@ -26,10 +23,10 @@ export class BusyService {
         }
 
         if (this.numberOfBusyRequests == this.numberOfNonBusyRequests) {
-            this._busySource.next(false);
+            this._busySource.set(false);
         }
         else {
-            this._busySource.next(true);
+            this._busySource.set(true);
         }
 
     }

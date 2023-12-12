@@ -1,16 +1,15 @@
 import { Injectable } from '@angular/core';
 import * as signalR from "@microsoft/signalr"
-import { MessageService } from 'primeng/api';
 import { AuthService } from 'src/app/appServices/auth.service';
 import { environment } from 'src/environments/environment';
 import { ToastService } from './toast.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class SignalrNotificationService {
 
-  constructor(public _authService: AuthService, private toastrService: ToastService) { }
+  constructor(public _authService: AuthService, private toastrService: ToastService) { 
+    console.log("SignalR service initialized")
+  }
 
   public startConnection = () => {
     let hubUrl = environment.apiUrl + '/notificationHub';

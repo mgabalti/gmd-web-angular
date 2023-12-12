@@ -14,6 +14,7 @@ export class AuthService extends ApiHandler {
   constructor(myHttpClient: HttpClient,
     private router: Router, private storageService: StorageService) {
     super(myHttpClient);
+    console.log("auth service initilized")
   }
 
   public login(credentials: {
@@ -29,6 +30,10 @@ export class AuthService extends ApiHandler {
 
   public get loginUserId() {
     return this.getUserData?.user_id;
+  }
+
+  public getProfile() {
+    return this.get(environment.apiUrl + AUTH_API_ENDPOINTS.GetProfile)
   }
   public isLogin(): boolean {
     const accessToken = this.storageService.accessToken;
